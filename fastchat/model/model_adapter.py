@@ -599,7 +599,7 @@ class OasstLLaMAAdapter(BaseModelAdapter):
 
     def get_default_conv_template(self, model_path: str) -> Conversation:
         return get_conv_template("oasst_llama")
-
+    
 
 class PythiaAdapter(BaseModelAdapter):
     """The model adapter for any EleutherAI/pythia model"""
@@ -1026,6 +1026,36 @@ class NousHermesAdapter(BaseModelAdapter):
         return get_conv_template("alpaca")
 
 
+class OrcaLLaMAAdapter(BaseModelAdapter):
+    def match(self, model_path: str):
+        return "orca" in model_path
+
+    def load_model(self, model_path: str, from_pretrained_kwargs: dict):
+        tokenizer = LlamaTokenizer.from_pretrained(model_path)
+        model = LlamaForCausalLM.from_pretrained(
+            model_path, **from_pretrained_kwargs
+        )
+        return model, tokenizer
+
+    def get_default_conv_template(self, model_path: str) -> Conversation:
+        return get_conv_template("orca")
+
+
+class OpenChatLLaMAAdapter(BaseModelAdapter):
+    def match(self, model_path: str):
+        return "openchat" in model_path
+
+    def load_model(self, model_path: str, from_pretrained_kwargs: dict):
+        tokenizer = LlamaTokenizer.from_pretrained(model_path)
+        model = LlamaForCausalLM.from_pretrained(
+            model_path, **from_pretrained_kwargs
+        )
+        return model, tokenizer
+
+    def get_default_conv_template(self, model_path: str) -> Conversation:
+        return get_conv_template("openchat")
+
+
 # Note: the registration order matters.
 # The one registered earlier has a higher matching priority.
 register_model_adapter(PeftModelAdapter)
@@ -1067,6 +1097,8 @@ register_model_adapter(BaichuanAdapter)
 register_model_adapter(XGenAdapter)
 register_model_adapter(NousHermesAdapter)
 register_model_adapter(PythiaAdapter)
+register_model_adapter(OrcaLLaMAAdapter)
+register_model_adapter(OpenChatLLaMAAdapter)
 
 # After all adapters, try the default base adapter.
 register_model_adapter(BaseModelAdapter)

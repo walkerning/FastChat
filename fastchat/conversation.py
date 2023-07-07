@@ -759,6 +759,34 @@ register_conv_template(
 )
 
 
+# ref: https://huggingface.co/psmathur/orca_mini_13b
+register_conv_template(
+    Conversation(
+        name="orca",
+        system="### System:\nYou are an AI assistant that follows instruction extremely well. Help as much as you can.\n\n",
+        roles=("### User:\n", "### Response:\n"),
+        messages=(),
+        offset=0,
+        sep_style=SeparatorStyle.NO_COLON_SINGLE,
+        sep="\n\n",
+    )
+)
+
+
+# ref: https://huggingface.co/openchat/openchat
+register_conv_template(
+    Conversation(
+        name="openchat",
+        system="System: You are an AI assistant that follows instruction extremely well. Help as much as you can.\n",
+        roles=("Human", "Assistant"),
+        messages=(),
+        offset=0,
+        sep_style=SeparatorStyle.ADD_COLON_SINGLE,
+        sep="<|end_of_turn|>",
+    )
+)
+
+
 if __name__ == "__main__":
     conv = get_conv_template("vicuna_v1.1")
     conv.append_message(conv.roles[0], "Hello!")
