@@ -774,6 +774,7 @@ register_conv_template(
 
 
 # ref: https://huggingface.co/openchat/openchat
+#      https://github.com/imoneoi/openchat/blob/master/ochat/serving/inference.py
 register_conv_template(
     Conversation(
         name="openchat",
@@ -783,6 +784,37 @@ register_conv_template(
         offset=0,
         sep_style=SeparatorStyle.ADD_COLON_SINGLE,
         sep="<|end_of_turn|>",
+        stop_token_ids=[32000],
+    )
+)
+
+
+# ref: https://huggingface.co/CarperAI/stable-vicuna-13b-delta
+register_conv_template(
+    Conversation(
+        name="stable_vicuna",
+        system="",
+        roles=("### Human", "### Assistant"),
+        messages=(),
+        offset=0,
+        sep_style=SeparatorStyle.ADD_COLON_SINGLE,
+        sep="\n",
+        stop_str="###",
+    )
+)
+
+
+# ref: https://huggingface.co/openbmb/UltraLM-13b
+register_conv_template(
+    Conversation(
+        name="ultra-lm",
+        system="A chat between a curious user and an artificial intelligence assistant. "
+        "The assistant gives helpful, detailed, and polite answers to the user's questions.",
+        roles=("User", "Assistant"),
+        messages=(),
+        offset=0,
+        sep_style=SeparatorStyle.ADD_COLON_SINGLE,
+        sep="</s>",
     )
 )
 

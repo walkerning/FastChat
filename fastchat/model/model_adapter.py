@@ -1056,9 +1056,27 @@ class OpenChatLLaMAAdapter(BaseModelAdapter):
         return get_conv_template("openchat")
 
 
+class StableVicunaAdapter(BaseModelAdapter):
+    def match(self, model_path: str):
+        return "stable-vicu" in model_path
+
+    def get_default_conv_template(self, model_path: str) -> Conversation:
+        return get_conv_template("stable_vicuna")
+
+
+class UltraLMAdapter(BaseModelAdapter):
+    def match(self, model_path: str):
+        return "ultralm" in model_path.lower()
+
+    def get_default_conv_template(self, model_path: str) -> Conversation:
+        return get_conv_template("ultra-lm")
+
+
 # Note: the registration order matters.
 # The one registered earlier has a higher matching priority.
 register_model_adapter(PeftModelAdapter)
+# Let's register stable-vicuna first, maybe we need a more robust match test
+register_model_adapter(StableVicunaAdapter)
 register_model_adapter(VicunaAdapter)
 register_model_adapter(AiroborosAdapter)
 register_model_adapter(LongChatAdapter)
@@ -1099,6 +1117,7 @@ register_model_adapter(NousHermesAdapter)
 register_model_adapter(PythiaAdapter)
 register_model_adapter(OrcaLLaMAAdapter)
 register_model_adapter(OpenChatLLaMAAdapter)
+register_model_adapter(UltraLMAdapter)
 
 # After all adapters, try the default base adapter.
 register_model_adapter(BaseModelAdapter)
